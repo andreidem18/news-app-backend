@@ -1,7 +1,7 @@
 from django.db import models
 from categories.models import Category
 
-class New(models.Model):
+class News(models.Model):
     headline = models.CharField(max_length=200)
     author = models.CharField(max_length=100)
     lead = models.TextField()

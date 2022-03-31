@@ -6,14 +6,18 @@ from rest_framework.response import Response
 from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.serializers import ModelSerializer
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_favorites(request):
     user = request.user
     serialized = FavoriteSerializer(user.favorites, many=True)
     return Response(status=status.HTTP_200_OK, data=serialized.data)
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
 def remove_favorite(request, id):
     Favorite.objects.get(id=id).delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
@@ -25,6 +29,7 @@ class RateSerializer(ModelSerializer):
 
 @swagger_auto_schema(methods=['put'], request_body=RateSerializer)
 @api_view(['PUT'])
+@permission_classes([IsAuthenticated])
 def change_rate(request, id):
     favorite = Favorite.objects.get(id=id)
     favorite.rate = request.data['rate']
